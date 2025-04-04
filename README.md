@@ -25,3 +25,10 @@ vue-router : Routing for vue
 typescript : Add types to JS
 
 
+## Installation
+
+Clone the repository
+Run npm install
+Create a .env file in the root directory and add the following environment variables:
+VITE_API_URL=http://localhost:5000
+Run the server with npm run dev and open on http://localhost:3000
