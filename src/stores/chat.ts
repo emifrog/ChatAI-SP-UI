@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import axios from 'axios';
-import { useUserStore } from './user';
+import { useAuthStore } from './auth';
 
 interface ChatMessage {
   message: string;
@@ -17,18 +17,19 @@ export const useChatStore = defineStore('chat', () => {
   const messages = ref<{ role: string; content: string }[]>([]);
   const isLoading = ref(false);
 
-  const userStore = useUserStore();
+  const authStore = useAuthStore();
 
   // Load previous chat messages
   const loadChatHistory = async () => {
-    if (!userStore.userId) return;
+    if (!authStore.isAuthenticated || !authStore.user) return;
 
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/get-messages`,
         {
-          userId: userStore.userId,
-        }
+          userId: authStore.user?.userId,
+        },
+        authStore.getAuthHeaders()
       );
 
       messages.value = data.messages
@@ -44,7 +45,15 @@ export const useChatStore = defineStore('chat', () => {
 
   // Send new message to AI
   const sendMessage = async (message: string) => {
-    if (!message.trim() || !userStore.userId) return;
+    if (!message.trim() || !authStore.isAuthenticated || !authStore.user) return;
+
+    if (!authStore.isAuthenticated) {
+      messages.value.push({
+        role: 'ai',
+        content: 'Veuillez vous connecter pour utiliser le chat.',
+      });
+      return;
+    }
 
     messages.value.push({ role: 'user', content: message });
 
@@ -55,8 +64,9 @@ export const useChatStore = defineStore('chat', () => {
         `${import.meta.env.VITE_API_URL}/chat`,
         {
           message,
-          userId: userStore.userId,
-        }
+          userId: authStore.user?.userId,
+        },
+        authStore.getAuthHeaders()
       );
 
       messages.value.push({ role: 'ai', content: data.reply });

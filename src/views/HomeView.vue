@@ -1,47 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
-import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
 import robotImage from '../assets/robot.png';
 
-const userStore = useUserStore();
 const router = useRouter();
 
 const name = ref('');
 const email = ref('');
-const loading = ref(false);
+const password = ref('');
 const error = ref('');
 
-const createUser = async () => {
-  if (!name.value || !email.value) {
-    error.value = 'Name and email are required';
-    return;
-  }
+// Fonction pour rediriger vers la page de chat
+const goToChat = () => {
+  router.push('/chat');
+};
 
-  loading.value = true;
-  error.value = '';
-
-  try {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_API_URL}/register-user`,
-      {
-        name: name.value,
-        email: email.value,
-      }
-    );
-
-    userStore.setUser({
-      userId: data.userId,
-      name: data.name,
-    });
-
-    router.push('/chat');
-  } catch (err) {
-    error.value = 'Something went wrong. Please try again';
-  } finally {
-    loading.value = false;
-  }
+// Fonction pour rediriger vers la page d'inscription
+const goToRegister = () => {
+  router.push('/auth');
 };
 </script>
 
@@ -65,13 +41,25 @@ const createUser = async () => {
         placeholder="Email"
         v-model="email"
       />
+      <input
+        type="password"
+        class="w-full p-2 mb-2 bg-gray-700 text-white rounded-lg focus:outline-none"
+        placeholder="Password"
+        v-model="password"
+      />
 
       <button
-        @click="createUser"
-        class="w-full p-2 bg-blue-500 rounded-lg"
-        :disabled="loading"
+        @click="goToChat"
+        class="w-full p-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
       >
-        {{ loading ? 'Logging in...' : 'Start Chat' }}
+        Start Chat
+      </button>
+
+      <button
+        @click="goToRegister"
+        class="w-full p-2 mt-2 bg-green-500 rounded-lg hover:bg-green-600 transition-colors"
+      >
+        S'inscrire
       </button>
 
       <p v-if="error" class="text-red-400 text-center mt-2">{{ error }}</p>

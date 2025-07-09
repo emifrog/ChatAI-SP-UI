@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useUserStore } from '../stores/user';
+import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
 import robotImage from '../assets/robot.png';
 
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const logout = () => {
-  userStore.logout();
+  authStore.logout();
   router.push('/');
 };
 </script>

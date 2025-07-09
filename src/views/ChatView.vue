@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { onMounted, nextTick } from 'vue';
-import { useUserStore } from '../stores/user';
+import { useAuthStore } from '../stores/auth';
 import { useChatStore } from '../stores/chat';
 import { useRouter } from 'vue-router';
 import Header from '../components/Header.vue';
 import ChatInput from '../components/ChatInput.vue';
 
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const chatStore = useChatStore();
 const router = useRouter();
 
 // Ensure user is logged in
-if (!userStore.userId) {
+if (!authStore.isAuthenticated) {
   router.push('/');
 }
 
