@@ -1,6 +1,6 @@
 # ChatAI-SP UI
 
-Interface utilisateur de l'application ChatAI-SP, une application full stack similaire à ChatGPT, qui répond aux questions et conserve le contexte tout au long de la conversation. Le frontend est construit avec Vue.js 3, utilise Pinia pour la gestion des états, et communique avec une API backend sécurisée par JWT.
+Interface utilisateur de l'application ChatAI-SP, une application chatbot full stack, qui répond aux questions et conserve le contexte tout au long de la conversation. Le frontend est construit avec Vue.js 3, utilise Pinia pour la gestion des états, et communique avec une API backend sécurisée par JWT.
 
 ## Fonctionnalités
 
